@@ -26,7 +26,6 @@
                     width: 20,
                     height: 20
                 },
-                box = new Image(),
                 boxes = [],                                  //border/boundaries/obstacles
                 upCheck = false,
                 downCheck = false,
@@ -43,7 +42,6 @@
                 
             canvas.width = width;                            //applies dimensions to canvas
             canvas.height = height;
-            box.src = "images/box.gif";
             
             function pad(number, digits) {
                 return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
@@ -64,11 +62,10 @@
             }
             
             function drawBorder() {
-                for (var i = 0; i < 5; i++) {       //border row, under header
-                    for (var j = 0; j < width / 20; j++)
+                for (var i = 0; i < width / 20; i++) {       //border row, under header
                     boxes.push({
-                        x: j * 20,
-                        y: i * 20,
+                        x: i * 20,
+                        y: 80,
                     });
                 }
                 for (var i = 0; i < width/ 20; i++) {        //footer
@@ -80,7 +77,7 @@
                 ctx.fillStyle = "#E05858";
                 ctx.fillRect(0, 0, width, 80);               //draw header
                 for (var i = 0; i < boxes.length; i++) {     //draw under header and footer
-                    ctx.drawImage(box, boxes[i].x, boxes[i].y)
+                    ctx.fillRect(boxes[i].x, boxes[i].y, 20, 20)
                 }
             }
             
