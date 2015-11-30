@@ -21,24 +21,24 @@
                     height: 20,                              //canvas dimensions must be divisible player dimensions
                     move: 20
                 },
-                ball = {
+                ball = {                                     //ball object
                     x: 200,
                     y: 200,
                     width: 20,
                     height: 20
                 },
-                box = new Image(),
+                box = new Image(),                           //image for boxes
                 boxes = [],                                  //border/boundaries/obstacles
                 upCheck = false,
-                downCheck = false,
+                downCheck = false,                           //checks squares around player for collision with boxes
                 rightCheck = false,
                 leftCheck = false,
                 upBall = false,
-                downBall = false,
+                downBall = false,                            //checks squares around player for ball
                 rightBall = false,
                 leftBall = false,
                 upBlock = false,
-                downBlock = false,
+                downBlock = false,                           //checks squares around ball for collision when player is near
                 rightBlock = false,
                 leftBlock = false;
                 
@@ -46,42 +46,42 @@
             canvas.height = height;
             box.src = "images/box.gif";
             
-            function pad(number, digits) {
+            function pad(number, digits) {                   //pads timer with leading '0's
                 return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
             }
             
-            function createTimer(seconds) {
+            function createTimer(seconds) {                  //creates timer
                 intervalVar = setInterval(function () {
-                    ctx.clearRect(970, 15, 200, 70);
-                    ctx.font = "30px 'Press Start 2p";
+                    ctx.clearRect(0, 0, width, 80);
+                    ctx.font = "20px 'Press Start 2P'";
                     ctx.fillStyle = "white";
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
                     var secondsToShow = (seconds).toString();
                    
-                    ctx.fillText(pad(secondsToShow, 5), 1070, 50);
+                    ctx.fillText('LEVEL', 120, 25);
+                    ctx.fillText('1-1', 120, 55);
+                    ctx.fillText('TIME', 1065, 25);
+                    ctx.fillText(pad(secondsToShow, 5), 1070, 55);
+                    
                     seconds++;
                 }, 1000);
             }
             
-            function drawBorder() {
-                for (var i = 0; i < 5; i++) {       //header
-                    for (var j = 0; j < width / 20; j++) {
-                        boxes.push({
-                            x: j * 20,
-                            y: i * 20
-                        });
-                    }
+            function drawBorder() {                          //draws border: header and footer
+                for (var i = 0; i < width / 20; i++) {                //create header blocks
+                    boxes.push({
+                        x: i * 20,
+                        y: 80
+                    });
                 }
-                for (var i = 0; i < width/ 20; i++) {        //footer
+                for (var i = 0; i < width/ 20; i++) {        //create footer blocks
                     boxes.push({
                         x: i * 20,
                         y: height - 20,
                     });
                 }
-                ctx.fillStyle = "#E05858";
-                ctx.fillRect(0, 0, width, 80);               //draw header
-                for (var i = 0; i < boxes.length; i++) {     //draw under header and footer
+                for (var i = 0; i < boxes.length; i++) {     //draw header and footer
                     ctx.drawImage(box, boxes[i].x, boxes[i].y)
                 }
             }
@@ -90,7 +90,7 @@
                 for (var i = 0; i < boxes.length; i++) {
                     if (boxes[i].y == player.y - 20 && boxes[i].x == player.x) {
                         upCheck = true;
-                        break;
+                        break;                               //if box is found above player
                     }
                     else {
                         upCheck = false;
@@ -99,7 +99,7 @@
                 for (var i = 0; i < boxes.length; i++) {
                     if (boxes[i].y == player.y + 20 && boxes[i].x == player.x) {
                         downCheck = true;
-                        break;
+                        break;                               //box below player
                     }
                     else {
                         downCheck = false;
@@ -108,7 +108,7 @@
                 for (var i = 0; i < boxes.length; i++) {
                     if (boxes[i].y == player.y && boxes[i].x == player.x + 20) {
                         rightCheck = true;
-                        break;
+                        break;                               //box to the right
                     }
                     else {
                         rightCheck = false;
@@ -117,18 +117,18 @@
                 for (var i = 0; i < boxes.length; i++) {
                     if (boxes[i].y == player.y && boxes[i].x == player.x - 20) {
                         leftCheck = true;
-                        break;
+                        break;                               //box to the left
                     }
                     else {
                         leftCheck = false;
                     }
                 }
                 if (ball.y == player.y - 20 && ball.x == player.x) {
-                    upBall = true;
+                    upBall = true;                           //ball is above player
                     for (var i = 0; i < boxes.length; i++) {
                         if (boxes[i].y == ball.y - 20 && boxes[i].x == ball.x) {
                             upBlock = true;
-                            break;
+                            break;                           //box is above ball above player
                         }
                         else {
                             upBlock = false;
@@ -139,11 +139,11 @@
                     upBall = false;
                 }
                 if (ball.y == player.y + 20 && ball.x == player.x) {
-                    downBall = true;
+                    downBall = true;                         //ball is below player
                     for (var i = 0; i < boxes.length; i++) {
                         if (boxes[i].y == ball.y + 20 && boxes[i].x == ball.x) {
                             downBlock = true;
-                            break;
+                            break;                           //box is below ball below player
                         }
                         else {
                             downBlock = false;
@@ -154,11 +154,11 @@
                     downBall = false;
                 }
                 if (ball.y == player.y && ball.x == player.x + 20) {
-                    rightBall = true;
+                    rightBall = true;                        //ball is right of player
                     for (var i = 0; i < boxes.length; i++) {
                         if (boxes[i].y == ball.y && boxes[i].x == ball.x + 20) {
                             rightBlock = true;
-                            break;
+                            break;                           //box is right of ball right of player
                         }
                         else {
                             rightBlock = false;
@@ -169,11 +169,11 @@
                     rightBall = false;
                 }
                 if (ball.y == player.y && ball.x == player.x - 20) {
-                    leftBall = true;
+                    leftBall = true;                         //ball is left of player
                     for (var i = 0; i < boxes.length; i++) {
                         if (boxes[i].y == ball.y && boxes[i].x == ball.x - 20) {
                             leftBlock = true;
-                            break;
+                            break;                           //box is left of ball left of player
                         }
                         else {
                             leftBlock = false;
@@ -191,7 +191,7 @@
                         if (player.y > 0 && upCheck == false){ 
                             if (upBall == true && upBlock == false) {
                                 player.y -= player.move;
-                                ball.y -= 20;
+                                ball.y -= 20;                //if ball is above player, 
                             }
                             else if (upBall == false) {
                                 player.y -= player.move;
@@ -239,7 +239,8 @@
             }
            
             function init() {
-                createTimer(0000);
+          //      headerText();
+                createTimer(0);
                 drawBorder();
                 return setInterval(update, 10);              //run update() every 10ms
             }
