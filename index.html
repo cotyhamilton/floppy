@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>floppy</title>
+		<title>FLOPPY</title>
         <link type="text/css" rel="stylesheet" href="stylesheet.css" />
         <link href='https://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
 	</head>
@@ -50,20 +50,19 @@
                 return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
             }
             
-            function createTimer(seconds) {                  //creates timer
+            function drawHeader(seconds) {                  //draws header
                 intervalVar = setInterval(function () {
                     ctx.clearRect(0, 0, width, 80);
                     ctx.font = "20px 'Press Start 2P'";
                     ctx.fillStyle = "white";
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    var secondsToShow = (seconds).toString();
                    
                     ctx.fillText('LEVEL', 120, 25);
                     ctx.fillText('1-1', 120, 55);
                     ctx.fillText('TIME', 1065, 25);
-                    ctx.fillText(pad(secondsToShow, 5), 1070, 55);
-                    
+                    ctx.fillText(pad(seconds.toString(), 5), 1070, 55);
+                                                             //^ timer
                     seconds++;
                 }, 1000);
             }
@@ -239,8 +238,7 @@
             }
            
             function init() {
-          //      headerText();
-                createTimer(0);
+                drawHeader(0);
                 drawBorder();
                 return setInterval(update, 10);              //run update() every 10ms
             }
