@@ -43,6 +43,24 @@
             canvas.width = width;                            //applies dimensions to canvas
             canvas.height = height;
             
+            function pad(number, digits) {
+                return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
+            }
+            
+            function createTimer(seconds) {
+                intervalVar = setInterval(function () {
+                    ctx.clearRect(970, 15, 200, 70);
+                    ctx.font = "60px monospace";
+                    ctx.fillStyle = "white";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    var secondsToShow = (seconds).toString();
+                   
+                    ctx.fillText(pad(secondsToShow, 5), 1070, 50);
+                    seconds++;
+                }, 1000);
+            }
+            
             function drawBorder() {
                 for (var i = 0; i < width / 20; i++) {       //border row, under header
                     boxes.push({
@@ -63,7 +81,7 @@
                 }
             }
             
-            function collisionCheck() {
+            function collisionCheck() {                      //check for collision
                 for (var i = 0; i < boxes.length; i++) {
                     if (boxes[i].y == player.y - 20 && boxes[i].x == player.x) {
                         upCheck = true;
@@ -216,6 +234,7 @@
             }
            
             function init() {
+                createTimer(0000);
                 drawBorder();
                 return setInterval(update, 10);              //run update() every 10ms
             }
@@ -224,7 +243,7 @@
                 ctx.clearRect(0, 100, width, height - 120);          //clears canvas
                 ctx.fillStyle = "white";                     //player style + draw player
                 ctx.fillRect(player.x, player.y, player.width, player.height);
-                ctx.fillStyle = "cyan";
+                ctx.fillStyle = "#3498DB";
                 ctx.fillRect(ball.x, ball.y, ball.width, ball.height);
             }
 
