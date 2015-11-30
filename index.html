@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>floppy</title>
+        <link type="text/css" rel="stylesheet" href="stylesheet.css" />
+	</head>
+	<body>
+        <div id="canvas-container">
+            <canvas id="canvas">Your browser doesn't support HTML5</canvas>
+        </div>
+		<script>
+            var canvas = document.getElementById("canvas"),
+                ctx = canvas.getContext("2d"),
+                width = 1200,                                //canvas dimensions
+                height = 600,
+                player = {                                   //player object
+                    x: width/2, 
+                    y: height/2,                             //starting point, middle of canvas
+                    width: 20,
+                    height: 20,                              //canvas dimensions must be divisible player dimensions
+                    move: 20
+                },
+                boxes = [],                                  //border/boundaries/obstacles
+                upCheck = false,
+                downCheck = false,
+                rightCheck = false,
+                leftCheck = false;
+                
+            canvas.width = width;                            //applies dimensions to canvas
+            canvas.height = height;
+            
+            function drawBorder() {
+                for (var i = 0; i < width / 20; i++) {       //border row, under header
+                    boxes.push({
+                        x: i * 20,
+                        y: 80,
+                    });
+                }
+                for (var i = 0; i < width/ 20; i++) {        //footer
+                    boxes.push({
+                        x: i * 20,
+                        y: height - 20,
+                    });
+                }
+                ctx.fillStyle = "#E05858";
+                ctx.fillRect(0, 0, width, 80);               //draw header
+                for (var i = 0; i < boxes.length; i++) {     //draw under header and footer
+                    ctx.fillRect(boxes[i].x, boxes[i].y, 20, 20)
+                }
+            }
+            
+            function collisionCheck() {
+                for (var i = 0; i < boxes.length; i++) {
+                    if (boxes[i].y == player.y - 20 && boxes[i].x == player.x) {
+                        upCheck = true;
+                        break;
+                    }
+                    else {
+                        upCheck = false;
+                    }
+                }
+                for (var i = 0; i < boxes.length; i++) {
+                    if (boxes[i].y == player.y + 20 && boxes[i].x == player.x) {
+                        downCheck = true;
+                        break;
+                    }
+                    else {
+                        downCheck = false;
+                    }
+                }
+                for (var i = 0; i < boxes.length; i++) {
+                    if (boxes[i].y == player.y && boxes[i].x == player.x + 20) {
+                        rightCheck = true;
+                        break;
+                    }
+                    else {
+                        rightCheck = false;
+                    }
+                }
+                for (var i = 0; i < boxes.length; i++) {
+                    if (boxes[i].y == player.y && boxes[i].x == player.x - 20) {
+                        leftCheck = true;
+                        break;
+                    }
+                    else {
+                        leftCheck = false;
+                    }
+                }
+                
+            }
+
+            function move(evt){                              //event (keyboard input)
+                switch (evt.keyCode) {
+                    case 38:                                 //Up arrow was pressed
+                        if (player.y > 0 && upCheck == false){ 
+                            player.y -= player.move;
+                            collisionCheck();
+                            console.log(player.x, player.y);
+                        }
+                      break;
+                    case 40:                                 //Down arrow was pressed
+                        if (player.y + player.height < height && downCheck == false){ 
+                            player.y += player.move;
+                            collisionCheck();
+                            console.log(player.x, player.y);
+                        }
+                      break;
+                    case 37:                                 //Left arrow was pressed
+                        if (player.x > 0 && leftCheck == false){ 
+                            player.x -= player.move;
+                            collisionCheck();
+                            console.log(player.x, player.y);
+                      }
+                      break;
+                    case 39:                                 //Right arrow was pressed
+                        if (player.x + player.width < width && rightCheck == false){ 
+                            player.x += player.move;
+                            collisionCheck();
+                            console.log(player.x, player.y);
+                      }
+                      break;
+                }
+            }
+           
+            function init() {
+                drawBorder();
+                return setInterval(update, 10);              //run update() every 10ms
+            }
+            
+            function update() {
+                ctx.clearRect(0, 100, width, height - 120);          //clears canvas
+                ctx.fillStyle = "white";                     //player style + draw player
+                ctx.fillRect(player.x, player.y, player.width, player.height);
+            }
+
+            window.addEventListener('keydown', move, true);  //if key is pressed, execute move()
+            
+            window.addEventListener("load", function(){      //start init() upon page load
+                init();
+            });
+		</script>
+	</body>
+</html>
