@@ -20,11 +20,25 @@
                     height: 20,                              //canvas dimensions must be divisible player dimensions
                     move: 20
                 },
+                ball = {
+                    x: 200,
+                    y: 200,
+                    width: 20,
+                    height: 20
+                },
                 boxes = [],                                  //border/boundaries/obstacles
                 upCheck = false,
                 downCheck = false,
                 rightCheck = false,
-                leftCheck = false;
+                leftCheck = false,
+                upBall = false,
+                downBall = false,
+                rightBall = false,
+                leftBall = false,
+                upBlock = false,
+                downBlock = false,
+                rightBlock = false,
+                leftBlock = false;
                 
             canvas.width = width;                            //applies dimensions to canvas
             canvas.height = height;
@@ -86,37 +100,116 @@
                         leftCheck = false;
                     }
                 }
-                
+                if (ball.y == player.y - 20 && ball.x == player.x) {
+                    upBall = true;
+                    for (var i = 0; i < boxes.length; i++) {
+                        if (boxes[i].y == ball.y - 20 && boxes[i].x == ball.x) {
+                            upBlock = true;
+                            break;
+                        }
+                        else {
+                            upBlock = false;
+                        }
+                    }
+                }
+                else {
+                    upBall = false;
+                }
+                if (ball.y == player.y + 20 && ball.x == player.x) {
+                    downBall = true;
+                    for (var i = 0; i < boxes.length; i++) {
+                        if (boxes[i].y == ball.y + 20 && boxes[i].x == ball.x) {
+                            downBlock = true;
+                            break;
+                        }
+                        else {
+                            downBlock = false;
+                        }
+                    }
+                }
+                else {
+                    downBall = false;
+                }
+                if (ball.y == player.y && ball.x == player.x + 20) {
+                    rightBall = true;
+                    for (var i = 0; i < boxes.length; i++) {
+                        if (boxes[i].y == ball.y && boxes[i].x == ball.x + 20) {
+                            rightBlock = true;
+                            break;
+                        }
+                        else {
+                            rightBlock = false;
+                        }
+                    }
+                }
+                else {
+                    rightBall = false;
+                }
+                if (ball.y == player.y && ball.x == player.x - 20) {
+                    leftBall = true;
+                    for (var i = 0; i < boxes.length; i++) {
+                        if (boxes[i].y == ball.y && boxes[i].x == ball.x - 20) {
+                            leftBlock = true;
+                            break;
+                        }
+                        else {
+                            leftBlock = false;
+                        }
+                    }
+                }
+                else {
+                    leftBall = false;
+                }
             }
 
             function move(evt){                              //event (keyboard input)
                 switch (evt.keyCode) {
                     case 38:                                 //Up arrow was pressed
                         if (player.y > 0 && upCheck == false){ 
-                            player.y -= player.move;
+                            if (upBall == true && upBlock == false) {
+                                player.y -= player.move;
+                                ball.y -= 20;
+                            }
+                            else if (upBall == false) {
+                                player.y -= player.move;
+                            }
                             collisionCheck();
-                            console.log(player.x, player.y);
                         }
                       break;
                     case 40:                                 //Down arrow was pressed
                         if (player.y + player.height < height && downCheck == false){ 
-                            player.y += player.move;
+                            if (downBall == true && downBlock == false) {
+                                player.y += player.move;
+                                ball.y += 20;
+                            }
+                            else if (downBall == false) {
+                                player.y += player.move;
+                            }
                             collisionCheck();
-                            console.log(player.x, player.y);
                         }
                       break;
                     case 37:                                 //Left arrow was pressed
                         if (player.x > 0 && leftCheck == false){ 
-                            player.x -= player.move;
+                            if (leftBall == true && leftBlock == false) {
+                                player.x -= player.move;
+                                ball.x -= 20;
+                            }
+                            else if (leftBall == false) {
+                                player.x -= player.move;
+                            }
                             collisionCheck();
-                            console.log(player.x, player.y);
                       }
                       break;
                     case 39:                                 //Right arrow was pressed
                         if (player.x + player.width < width && rightCheck == false){ 
-                            player.x += player.move;
+                            if (rightBall == true && rightBlock == false) {
+                                player.x += player.move;
+                                ball.x += 20;
+                            }
+                            else if (rightBall == false) {
+                                player.x += player.move;
+                            }
                             collisionCheck();
-                            console.log(player.x, player.y);
                       }
                       break;
                 }
@@ -131,6 +224,8 @@
                 ctx.clearRect(0, 100, width, height - 120);          //clears canvas
                 ctx.fillStyle = "white";                     //player style + draw player
                 ctx.fillRect(player.x, player.y, player.width, player.height);
+                ctx.fillStyle = "cyan";
+                ctx.fillRect(ball.x, ball.y, ball.width, ball.height);
             }
 
             window.addEventListener('keydown', move, true);  //if key is pressed, execute move()
