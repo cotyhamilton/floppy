@@ -43,6 +43,7 @@ window.onload = function(){
       this.x += this.move;
     }
   },
+  name = new Image(),
   box = new Image(),                           //image for boxes
   boxes = [],                                  //border/boundaries/obstacles
   upCheck = false,
@@ -61,6 +62,7 @@ window.onload = function(){
   canvas.width = width;                            //applies dimensions to canvas
   canvas.height = height;
   box.src = "images/box.gif";
+  name.src = "images/name.png";
 
   function pad(number, digits) {                   //pads timer with leading '0's
     return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
@@ -76,6 +78,7 @@ window.onload = function(){
 
       ctx.fillText('LEVEL', 120, 25);
       ctx.fillText('1-1', 120, 55);
+      ctx.fillText('- FLOPPY -', 600, 25);
       ctx.fillText('TIME', 1065, 25);
       ctx.fillText(pad(seconds.toString(), 5), 1070, 55);
       //^ timer
