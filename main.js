@@ -78,7 +78,7 @@ function drawBorder() {                          //draws border: header and foot
         });
     }
     boxes.push({
-        x: 600,
+        x: 500,
         y: 300
     });
     
