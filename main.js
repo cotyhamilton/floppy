@@ -3,15 +3,15 @@ var canvas = document.getElementById("canvas"),
     width = 1200,                                //canvas dimensions
     height = 600,
     player = {                                   //player object
-        x: width/2, 
-        y: height/2,                             //starting point, middle of canvas
+        x: 60, 
+        y: 140,                             //starting point, middle of canvas
         width: 20,
         height: 20,                              //canvas dimensions must be divisible player dimensions
         move: 20
     },
     ball = {                                     //ball object
-        x: 200,
-        y: 200,
+        x: 100,
+        y: 140,
         width: 20,
         height: 20
     },
@@ -77,13 +77,9 @@ function drawBorder() {                          //draws border: header and foot
             y: height - 20,
         });
     }
-    boxes.push({
-        x: 500,
-        y: 300
-    });
     
     for (var i = 0; i < boxes.length; i++) {     //draw header and footer
-        ctx.drawImage(box, boxes[i].x, boxes[i].y)
+        ctx.drawImage(box, boxes[i].x, boxes[i].y);
     }
 }
 
@@ -241,6 +237,7 @@ function move(evt){                              //event (keyboard input)
 function init() {
     drawHeader(0);
     drawBorder();
+    createBoxes();
     return setInterval(update, 10);              //run update() every 10ms
 }
 
@@ -256,7 +253,7 @@ function update() {
     ctx.drawImage(cheese, ball.x, ball.y);
  //   ctx.fillStyle = "#3498DB";
  //   ctx.fillRect(ball.x, ball.y, ball.width, ball.height);
-    ctx.drawImage(box, boxes[120].x, boxes[120].y);
+    drawBoxes();
 }
 window.addEventListener('keydown', move, true);  //if key is pressed, execute move()
 
