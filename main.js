@@ -16,12 +16,16 @@ var canvas = document.getElementById("canvas"),
         height: 20
     },
     goal = {
-        x: 710,
-        y: 430,
-    }
+        x: 120,
+        y: 260,
+        width: 20,
+        height: 20
+    },
+    
     mouse = new Image(),
     cheese = new Image(),
     box = new Image(),                           //image for boxes
+    hole = new Image(),    
     boxes = [],                                  //border/boundaries/obstacles
     upCheck = false,
     downCheck = false,                           //checks squares around player for collision with boxes
@@ -41,6 +45,7 @@ canvas.height = height;
 box.src = "assets/brick.png";
 mouse.src = "assets/player.png";
 cheese.src = "assets/cheese.png";
+hole.src = "assets/hole.png";
 
 function pad(number, digits) {                   //pads timer with leading '0's
     return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
@@ -243,16 +248,9 @@ function init() {
 
 function update() {
     ctx.clearRect(0, 100, width, height - 120);          //clears canvas
-    ctx.beginPath();
-    ctx.arc(goal.x, goal.y,10,0,2*Math.PI);
-    ctx.fillStyle = "cyan";
-    ctx.fill();
- //   ctx.fillStyle = "white";                     //player style + draw player
- //   ctx.fillRect(player.x, player.y, player.width, player.height);
     ctx.drawImage(mouse, player.x, player.y);
     ctx.drawImage(cheese, ball.x, ball.y);
- //   ctx.fillStyle = "#3498DB";
- //   ctx.fillRect(ball.x, ball.y, ball.width, ball.height);
+    ctx.drawImage(hole, goal.x, goal.y);
     drawBoxes();
 }
 window.addEventListener('keydown', move, true);  //if key is pressed, execute move()
