@@ -25,7 +25,8 @@ var canvas = document.getElementById("canvas"),
     mouse = new Image(),
     cheese = new Image(),
     box = new Image(),                           //image for boxes
-    hole = new Image(),    
+    hole = new Image(),
+    startScreen = new Image(),
     boxes = [],                                  //border/boundaries/obstacles
     upCheck = false,
     downCheck = false,                           //checks squares around player for collision with boxes
@@ -38,7 +39,9 @@ var canvas = document.getElementById("canvas"),
     upBlock = false,
     downBlock = false,                           //checks squares around ball for collision when player is near
     rightBlock = false,
-    leftBlock = false;
+    leftBlock = false,
+    gameStart = false,
+    intervalVar;
 
 canvas.width = width;                            //applies dimensions to canvas
 canvas.height = height;
@@ -46,6 +49,7 @@ box.src = "assets/brick.png";
 mouse.src = "assets/player.png";
 cheese.src = "assets/cheese.png";
 hole.src = "assets/hole.png";
+startScreen.src = "assets/start.png";
 
 function pad(number, digits) {                   //pads timer with leading '0's
     return Array(Math.max(digits - String(number).length + 1, 0)).join(0) + number;
@@ -62,6 +66,10 @@ function drawHeader(seconds) {                  //draws header
         ctx.fillText('LEVEL', 120, 25);
         ctx.fillText('1-1', 120, 55);
         ctx.fillText('- FLOPPY -', 600, 25);
+        if (seconds.toString() % 2 == 0) {
+            ctx.fillText('PRESS SPACE TO RESTART', 600, 55);
+        }
+        
         ctx.fillText('TIME', 1065, 25);
         ctx.fillText(pad(seconds.toString(), 5), 1070, 55);
                                                  //^ timer
@@ -236,10 +244,34 @@ function move(evt){                              //event (keyboard input)
                 collisionCheck();
           }
           break;
+        case 32:
+            clearInterval(intervalVar);
+            player.x = 60;
+            player.y = 140;
+            ball.x = 100;
+            ball.y = 140;
+            init();
+          break;
     }
 }
 
+function win() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.font = "100px 'Press Start 2P'";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    ctx.fillText('YOU WIN!', width/2, height/2);
+}
+
+function start() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.drawImage(startScreen, 0, height / 2 - 40);
+}
+
 function init() {
+    ctx.clearRect(0,0, width, height);
     drawHeader(0);
     drawBorder();
     createBoxes();
@@ -252,9 +284,14 @@ function update() {
     ctx.drawImage(cheese, ball.x, ball.y);
     ctx.drawImage(hole, goal.x, goal.y);
     drawBoxes();
+    if (ball.x == goal.x && ball.y == goal.y) {
+        clearInterval(intervalVar);
+        clearInterval(update);
+        return win();
+    }
 }
 window.addEventListener('keydown', move, true);  //if key is pressed, execute move()
 
 window.addEventListener("load", function(){      //start init() upon page load
-    init();
+    start();
 });
